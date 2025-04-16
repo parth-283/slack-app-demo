@@ -30,7 +30,7 @@ const Sidebar = () => {
             <div className="flex-1 overflow-y-auto">
                 <div className="mt-4 px-4 text-sm text-gray-400 uppercase">Conversations</div>
                 <ul className="mt-2">
-                    {chats.map((conv) => (
+                    {chats?.map((conv) => (
                         <li key={conv.id}>
                             <NavLink
                                 to={`/conversations/${conv.id}`}

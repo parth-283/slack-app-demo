@@ -1,21 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getConversationThunk } from "./chatThunks";
+import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk } from "./chatThunks";
 
 interface Message {
-  id: number;
-  conversationId: number;
+  id: string;
+  conversationId: string;
   sender: string;
   content: string;
+  timestamp: string
 }
 
 interface Conversation {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface ChatState {
-  activeConversationId: number | null;
-  drafts: Record<number, string>;
+  activeConversation: Conversation | null;
+  drafts: Record<string, string>;
   messages: Message[];
   conversation: Conversation[];
   loading: boolean;
@@ -23,7 +24,7 @@ interface ChatState {
 }
 
 const initialState: ChatState = {
-  activeConversationId: null,
+  activeConversation: null,
   drafts: {},
   messages: [],
   conversation: [],
@@ -35,13 +36,10 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setActiveConversation: (state, action: PayloadAction<number>) => {
-      state.activeConversationId = action.payload;
-    },
-    saveDraft: (state, action: PayloadAction<{ conversationId: number; draft: string }>) => {
+    saveDraft: (state, action: PayloadAction<{ conversationId: string; draft: string }>) => {
       state.drafts[action.payload.conversationId] = action.payload.draft;
     },
-    clearDraft: (state, action: PayloadAction<number>) => {
+    clearDraft: (state, action: PayloadAction<string>) => {
       delete state.drafts[action.payload];
     },
     setMessages: (state, action: PayloadAction<Message[]>) => {
@@ -63,10 +61,38 @@ const chatSlice = createSlice({
       })
       .addCase(getConversationThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Login failed';
+        state.error = action.payload || 'Fetch conversation failed';
+      })
+      .addCase(getActiveConversationThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getActiveConversationThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.activeConversation = action.payload?.conversation
+          ? { ...action.payload.conversation, id: String(action.payload.conversation.id) }
+          : null;
+      })
+      .addCase(getActiveConversationThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Fetch active conversation failed';
+      })
+      .addCase(getMessagesByConversationThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getMessagesByConversationThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.messages = action.payload.messages?.sort(
+          (a: { timestamp: string }, b: { timestamp: string }): number => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        ) || [];
+      })
+      .addCase(getMessagesByConversationThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Fetch messages by conversationId failed';
       });
   },
 });
 
-export const { setActiveConversation, saveDraft, clearDraft, setMessages, addMessage } = chatSlice.actions;
+export const { saveDraft, clearDraft, setMessages, addMessage } = chatSlice.actions;
 export default chatSlice.reducer;

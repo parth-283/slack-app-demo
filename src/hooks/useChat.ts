@@ -1,36 +1,35 @@
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store";
 import {
-  setActiveConversation,
   saveDraft,
   clearDraft,
   setMessages,
   addMessage,
 } from "../features/chat/chatSlice";
-import { getConversationThunk } from "../features/chat/chatThunks";
+import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk } from "../features/chat/chatThunks";
 
 export const useChat = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { activeConversationId, drafts, messages } = useSelector((state: RootState) => state.chat);
+  const { activeConversation, drafts, messages } = useSelector((state: RootState) => state.chat);
 
   const getConversationList = () => {
     dispatch(getConversationThunk())
   }
 
-  const selectConversation = (conversationId: number) => {
-    dispatch(setActiveConversation(conversationId));
+  const selectConversation = (conversationId: string) => {
+    dispatch(getActiveConversationThunk(conversationId));
   };
 
-  const saveDraftMessage = (conversationId: number, draft: string) => {
+  const saveDraftMessage = (conversationId: string, draft: string) => {
     dispatch(saveDraft({ conversationId, draft }));
   };
 
-  const clearDraftMessage = (conversationId: number) => {
+  const clearDraftMessage = (conversationId: string) => {
     dispatch(clearDraft(conversationId));
   };
 
-  const loadMessages = (newMessages: typeof messages) => {
-    dispatch(setMessages(newMessages));
+  const loadMessages = (conversationId: string) => {
+    dispatch(getMessagesByConversationThunk(conversationId));
   };
 
   const postNewMessage = (message: typeof messages[0]) => {
@@ -38,7 +37,7 @@ export const useChat = () => {
   };
 
   return {
-    activeConversationId,
+    activeConversation,
     drafts,
     messages,
     selectConversation,
