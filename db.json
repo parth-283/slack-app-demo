@@ -1,47 +1,47 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "username": "admin",
       "password": "admin123"
     },
     {
-      "id": 2,
+      "id": "2",
       "username": "user",
       "password": "user123"
     }
   ],
   "conversations": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Marketing"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Engineering"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Sales"
     }
   ],
   "messages": [
     {
-      "id": 1,
+      "id": "1",
       "conversationId": 1,
       "sender": "admin",
       "content": "Welcome to Marketing chat!",
       "timestamp": "2025-04-16T10:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "conversationId": 2,
       "sender": "admin",
       "content": "Engineering team updates here!",
       "timestamp": "2025-04-16T10:05:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "conversationId": 3,
       "sender": "admin",
       "content": "Sales meeting at 3 PM.",
@@ -137,6 +137,13 @@
       "sender": "admin",
       "content": "asdasdasd",
       "timestamp": "2025-04-16T11:51:22.405Z"
+    },
+    {
+      "id": "dbd4",
+      "conversationId": "1",
+      "sender": "admin",
+      "content": "sadasd",
+      "timestamp": "2025-04-16T12:05:55.317Z"
     }
   ]
 }
