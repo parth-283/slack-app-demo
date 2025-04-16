@@ -61,7 +61,7 @@ const chatSlice = createSlice({
       })
       .addCase(getConversationThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Fetch conversation failed';
+        state.error = JSON.stringify(action.payload) || 'Fetch conversation failed';
       })
       .addCase(getActiveConversationThunk.pending, (state) => {
         state.loading = true;
@@ -75,7 +75,7 @@ const chatSlice = createSlice({
       })
       .addCase(getActiveConversationThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Fetch active conversation failed';
+        state.error = JSON.stringify(action.payload) || 'Fetch active conversation failed';
       })
       .addCase(getMessagesByConversationThunk.pending, (state) => {
         state.loading = true;
@@ -89,18 +89,18 @@ const chatSlice = createSlice({
       })
       .addCase(getMessagesByConversationThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Fetch messages by conversationId failed';
+        state.error = JSON.stringify(action.payload) || 'Fetch messages by conversationId failed';
       })
       .addCase(sendMessageThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(sendMessageThunk.fulfilled, (state, action) => {
+      .addCase(sendMessageThunk.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(sendMessageThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Fetch messages by conversationId failed';
+        state.error = JSON.stringify(action.payload) || 'Fetch messages by conversationId failed';
       });
   },
 });

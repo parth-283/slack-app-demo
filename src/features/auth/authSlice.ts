@@ -33,7 +33,7 @@ const authSlice = createSlice({
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Login failed';
+        state.error = JSON.stringify(action.payload) || 'Login failed';
       });
   },
 });

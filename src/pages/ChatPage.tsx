@@ -12,8 +12,6 @@ const ChatPage = () => {
   const { activeConversation, messages } = useSelector((state: RootState) => state.chat);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  console.log(activeConversation, "conversations");
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
