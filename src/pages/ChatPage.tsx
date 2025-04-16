@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -7,7 +6,7 @@ import { useChat } from '../hooks/useChat';
 
 const ChatPage = () => {
   const { id } = useParams();
-  const { selectConversation, loadMessages } = useChat();
+  const { selectConversation, loadMessages, postNewMessage } = useChat();
   const [input, setInput] = useState('');
   const currentUser = useSelector((state: RootState) => state.auth.user?.username || 'guest');
   const { activeConversation, messages } = useSelector((state: RootState) => state.chat);
@@ -29,19 +28,19 @@ const ChatPage = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const handleSend = async () => {
+  const handleSend = async (e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     if (!input.trim()) return;
 
     const newMessage = {
-      conversationId: id,
+      conversationId: id || '0',
       sender: currentUser,
       content: input,
       timestamp: new Date().toISOString(),
     };
 
-    // const res = await axios.post(`${API_URL}/messages`, newMessage);
-    // setMessages((prev: any): any => [...prev, res.data]);
-    // setInput('');
+    postNewMessage(newMessage);
+    setInput('');
   };
 
   return (
@@ -54,7 +53,7 @@ const ChatPage = () => {
 
       <div className="flex-1 overflow-y-auto px-4 py-6 bg-gray-50 space-y-4">
         {messages.map((msg: {
-          id: string;
+          id?: string;
           conversationId: string;
           sender: string;
           content: string;
@@ -87,7 +86,7 @@ const ChatPage = () => {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend(e)}
             placeholder="Type your message..."
             className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />

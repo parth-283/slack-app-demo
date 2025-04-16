@@ -3,10 +3,8 @@ import { RootState, AppDispatch } from "../store";
 import {
   saveDraft,
   clearDraft,
-  setMessages,
-  addMessage,
 } from "../features/chat/chatSlice";
-import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk } from "../features/chat/chatThunks";
+import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk, sendMessageThunk } from "../features/chat/chatThunks";
 
 export const useChat = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +18,10 @@ export const useChat = () => {
     dispatch(getActiveConversationThunk(conversationId));
   };
 
+  const loadMessages = (conversationId: string) => {
+    dispatch(getMessagesByConversationThunk(conversationId));
+  };
+
   const saveDraftMessage = (conversationId: string, draft: string) => {
     dispatch(saveDraft({ conversationId, draft }));
   };
@@ -28,12 +30,8 @@ export const useChat = () => {
     dispatch(clearDraft(conversationId));
   };
 
-  const loadMessages = (conversationId: string) => {
-    dispatch(getMessagesByConversationThunk(conversationId));
-  };
-
   const postNewMessage = (message: typeof messages[0]) => {
-    dispatch(addMessage(message));
+    dispatch(sendMessageThunk(message));
   };
 
   return {

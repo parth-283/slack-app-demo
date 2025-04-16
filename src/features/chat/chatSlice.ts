@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk } from "./chatThunks";
+import { getActiveConversationThunk, getConversationThunk, getMessagesByConversationThunk, sendMessageThunk } from "./chatThunks";
 
 interface Message {
-  id: string;
+  id?: string;
   conversationId: string;
   sender: string;
   content: string;
@@ -10,7 +10,7 @@ interface Message {
 }
 
 interface Conversation {
-  id: string;
+  id?: string;
   name: string;
 }
 
@@ -88,6 +88,17 @@ const chatSlice = createSlice({
         ) || [];
       })
       .addCase(getMessagesByConversationThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Fetch messages by conversationId failed';
+      })
+      .addCase(sendMessageThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sendMessageThunk.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(sendMessageThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Fetch messages by conversationId failed';
       });
