@@ -68,9 +68,8 @@ This project is a Slack-like chat application built using **React**, **TypeScrip
 The application is structured to ensure modularity and scalability:
 ```
 
-```
 . ├── public/ # Static assets ├── src/ # Source code │ ├── api/ # API-related files │ ├── assets/ # Static assets like images │ ├── components/ # Reusable UI components │ ├── features/ # Redux slices and thunks │ │ ├── auth/ # Authentication-related logic │ │ └── chat/ # Chat-related logic │ ├── hooks/ # Custom React hooks │ ├── Layout/ # Layout components │ ├── pages/ # Page components │ ├── routes/ # Route guards (Private/Public) │ ├── services/ # API service functions │ ├── store.ts # Redux store configuration │ └── main.tsx # Application entry point ├── .env # Environment variables ├── package.json # Project dependencies and scripts ├── tailwind.config.js # TailwindCSS configuration ├── tsconfig.json # TypeScript configuration └── vite.config.ts # Vite configuration
-```
+
 
 ````
 
